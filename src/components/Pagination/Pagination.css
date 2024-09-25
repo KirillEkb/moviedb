@@ -1,0 +1,12 @@
+.ant-pagination-item-active a {
+    color: #ffffff;
+  }
+  .ant-pagination-item a {
+    color: #007bff;
+  }
+  .ant-pagination-item:hover a {
+    color: #0056b3;
+  }
+  .pagination {
+    margin-bottom: 20px;
+  }

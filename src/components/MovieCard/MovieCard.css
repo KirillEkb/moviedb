@@ -1,32 +1,108 @@
 .movieCard {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 451px;
-    height: 279px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25);
-    margin-bottom: 20px;
-    flex-shrink: 0;
+    display: grid;
+    grid-template-columns: 183px auto 40px;
+    grid-template-rows: 40px minmax(16px,32px) minmax(16px, 29px) minmax(0, 78px) 46px;
+    grid-template-areas:
+      "image title averageRate"
+      "image date date"
+      "image genres genres"
+      "image overview overview"
+      "image rate rate";
+    gap: 5px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 454px;
+    max-height: 281px;
+    padding-right: 5px;
+    @media screen and (max-width: 768px) {
+        width: 90%;
+        margin: 0 auto;
+        height: 100%;
+        display: grid;
+        padding: 5px;
+        grid-template-columns: 70px auto 40px;
+        grid-template-rows: 36px 16px minmax(16px, 29px) minmax(0, 78px) 46px;
+        grid-template-areas:
+        "image title averageRate"
+        "image date date"
+        "image genres genres"
+        "overview overview overview"
+        "rate rate rate";
+    }
 }
 
-
-.movieCard__info {
-    margin: 20px;
-    overflow: hidden;
-
+.movieCard__image {
+    grid-area: image;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit:contain;
 }
+
 
 .movieCard__title {
-font-family: Inter UI;
-font-size: 20px;
-line-height: 28px;
-text-align: left;
-margin: 0px;
+    padding: 0;
+    grid-area: title;
+    font-family: Inter UI;
+    font-size: 18px;
+    line-height: 28px;
+    text-align: left;
+    font-weight: bold;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.movieCard__averageRate  {
+    grid-area: averageRate;
+    text-align: center;
+    max-width: 30px;
+    height: 30px;
+    margin-top: 10px;
+    margin-right: 5px;
+    border: 2px solid yellow;
+    border-radius: 50%;
+    font-size: 15px;
+    line-height: 25px;
+}
+
+.movieCard__averageRate--low {
+    border-color: #E90000;
+}
+.movieCard__averageRate--medium {
+    border-color: #E97E00;
+}
+.movieCard__averageRate--high {
+    border-color: #E9D100;
+}
+.movieCard__averageRate--excellent {
+    border-color: #66E900;
+}
+.movieCard__genres {
+    grid-area: genres;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.movieCard__genre {
+    border: 1px solid rgba(217, 217, 217, 1);
+    padding: 2px 8px;
+    border-radius: 5px;
 }
 .movieCard__date {
-    font-family: Inter UI;
-    font-size: 12px;
-    line-height: 22px;
-    text-align: left;
-    color: #827E7E;
+    grid-area: date;
+    margin-top: 0;
+    color: #888;
 }    
+
+.movieCard__overview {
+    grid-area: overview;
+    color: #444;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.movieCard__rate {
+    grid-area: rate;
+    margin: 0 auto;
+    font-size: 17px;
+}

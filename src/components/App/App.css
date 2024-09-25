@@ -1,0 +1,12 @@
+.App__header {
+    margin: 0 auto;
+}
+.App__main {
+    width: 70%;
+    margin: 0 auto;
+    padding: 0 34px;
+    @media  screen and (max-width: 768px) {
+        width: 100%;
+        padding: 16px;
+    }
+}
