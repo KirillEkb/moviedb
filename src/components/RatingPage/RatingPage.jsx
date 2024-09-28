@@ -1,20 +1,15 @@
 import React from 'react';
-import { Online, Offline } from 'react-detect-offline';
 import PropTypes from 'prop-types';
 
-import Spin from '../Spin/Spin.jsx';
-import { customAlert as Alert } from '../Alert/Alert.jsx';
-import MovieList from '../MovieList/MovieList';
 import Pagination from '../Pagination/Pagination.jsx';
-import ApiContext from '../../context/context.jsx';
+import LoadList from '../LoadList/LoadList.jsx';
 class RatingPage extends React.Component {
-  static contextType = ApiContext;
   static propTypes = {
-    genres: PropTypes.object,
+    getRatedMovies: PropTypes.func,
   };
   state = {
     loading: false,
-    error: false,
+    error: '',
     ratedMovies: [],
     page: 1,
     totalResults: 0,
@@ -22,48 +17,42 @@ class RatingPage extends React.Component {
   componentDidMount() {
     this.getMovieList();
   }
-  componentDidCatch() {
-    this.setState({ error: 'something has gone wrong' });
+  static getDerivedStateFromError() {
+    return { error: 'something has gone wrong' };
   }
   getPage = (newPage) => {
     this.getMovieList(newPage);
   };
   getMovieList = (page = this.state.page) => {
-    const { getRatedMovies } = this.context;
     this.setState({ loading: true });
-    getRatedMovies(page).then((data) => {
-      this.setState({ ratedMovies: data.results, loading: false, totalResults: data.total_results, page: page });
-    });
-  };
-  isLoading = () => {
-    const { loading, error, ratedMovies } = this.state;
-    const { genres } = this.props;
-    if (loading) {
-      return <Spin></Spin>;
-    } else if (!error) {
-      return (
-        <MovieList
-          className="movieList, ratingPage__movieList"
-          key="ratedMovies"
-          genres={genres}
-          movies={ratedMovies}
-        />
-      );
-    } else {
-      return (
-        <>
-          <Offline> {Alert(`Проверьте соединение ${this.state.error}`)} </Offline>
-          <Online> {Alert(`Не удалось получить данные ${this.state.error}`)} </Online>
-        </>
-      );
-    }
+    this.props
+      .getRatedMovies(page)
+      .then((data) => {
+        this.setState({
+          ratedMovies: data.results,
+          loading: false,
+          totalResults: data.total_results,
+          page: page,
+          error: '',
+        });
+      })
+      .catch((error) => {
+        this.setState({ error: error.message, loading: false });
+      });
   };
 
   render() {
-    const { loading, page, totalResults } = this.state;
+    const { loading, error, ratedMovies, page, totalResults } = this.state;
+    console.log(error, 'in rating page');
     return (
       <>
-        {this.isLoading()}
+        <LoadList
+          postRating={this.props.postRating}
+          classNames="movieList, ratingPage__movieList"
+          loading={loading}
+          error={error}
+          movies={ratedMovies}
+        />
         <Pagination
           total={totalResults}
           page={page}

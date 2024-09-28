@@ -9,39 +9,34 @@ import RatingPage from '../RatingPage/RatingPage.jsx';
 
 export default class App extends Component {
   state = {
-    genres: {},
     tab: '1',
-    error: false,
+    error: '',
   };
-
-  componentDidMount() {
-    this.api.getGenres().then((genresObj) => {
-      this.setState({ genres: genresObj });
-    });
-  }
-  componentDidCatch() {
-    this.setState({ error: 'something has gone wrong' });
-  }
   api = new Api();
-
+  static getDerivedStateFromError() {
+    return { error: 'something has gone wrong' };
+  }
   getTab = (key = '1') => {
     this.setState({ tab: key });
   };
-  mountPage = () => {
-    if (this.state.tab === '1') {
-      return <SearchingPage genres={this.state.genres}></SearchingPage>;
-    }
-    if (this.state.tab === '2') {
-      return <RatingPage genres={this.state.genres}></RatingPage>;
-    }
-  };
 
   render() {
+    const { getMovies, getRatedMovies, postRating } = this.api;
     return (
-      <ApiProvider value={this.api}>
+      <ApiProvider value={this.api.getGenres}>
         <div className="MovieDB__App, App">
           <Header className="header App__header" getTab={this.getTab} />
-          <main className="main App__main">{this.mountPage()}</main>
+          <main className="main App__main">
+            {this.state.tab === '1' ? (
+              <SearchingPage
+                postRating={postRating}
+                getRatedMovies={getRatedMovies}
+                getMovies={getMovies}
+              ></SearchingPage>
+            ) : (
+              <RatingPage postRating={postRating} getRatedMovies={getRatedMovies}></RatingPage>
+            )}
+          </main>
         </div>
       </ApiProvider>
     );

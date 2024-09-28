@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 export const customAlert = (props) => {
   return (
     <div>
-      <Alert message={props.err} type="warning" />
+      <Alert message={props.message} type="warning" />
     </div>
   );
 };

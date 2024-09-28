@@ -11,22 +11,27 @@ export default class MovieList extends Component {
   };
   static propTypes = {
     movies: PropTypes.array,
-    genres: PropTypes.object,
+    genres: PropTypes.object.isRequired,
   };
   render() {
-    if (!this.props.movies.length) {
+    if (!this.props.movies.length && this.props.searching) {
       return <h3>Nothing found</h3>;
     } else {
-      const elements = this.props.movies.map((film) => {
-        const genresOfMovie = film.genre_ids.map((genre) => {
-          return this.props.genres[genre];
-        });
-        return <MovieCard key={film.id} film={film} genres={genresOfMovie}></MovieCard>;
-      });
-
       return (
         <Flex component="ul" className="movieList ratingPage__movieList">
-          {elements}
+          {this.props.movies.map((film) => {
+            const genresOfMovie = film.genre_ids.map((genre) => {
+              return this.props.genres[genre];
+            });
+            return (
+              <MovieCard
+                postRating={this.props.postRating}
+                key={film.id}
+                film={film}
+                genres={genresOfMovie}
+              ></MovieCard>
+            );
+          })}
         </Flex>
       );
     }

@@ -1,4 +1,5 @@
 export default class Api {
+  baseUrl = 'https://api.themoviedb.org/3';
   options = {
     method: 'GET',
     headers: {
@@ -13,7 +14,7 @@ export default class Api {
       return checkSessionID;
     }
     try {
-      const response = await fetch('https://api.themoviedb.org/3/authentication/guest_session/new', this.options);
+      const response = await fetch(`${this.baseUrl}/authentication/guest_session/new`, this.options);
       const data = await response.json();
       if (data.success) {
         localStorage.setItem('sessionID', data.guest_session_id);
@@ -36,7 +37,7 @@ export default class Api {
         },
       };
       const response = await fetch(
-        `https://api.themoviedb.org/3/search/movie?query=${searching}&language=en-US&page=${page}&api_key=${apiKey}`,
+        `${this.baseUrl}/search/movie?query=${searching}&language=en-US&page=${page}&api_key=${apiKey}`,
         options
       );
       if (!response.ok) {
@@ -63,14 +64,15 @@ export default class Api {
         }),
       };
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${movieId}/rating?guest_session_id=${await this.sessionID()}`,
+        `${this.baseUrl}/movie/${movieId}/rating?guest_session_id=${await this.sessionID()}`,
         options
       );
       if (!response.ok) {
         throw new Error(response.status);
       }
     } catch (error) {
-      return Error(error.message);
+      console.log(error.message, 'in catch block');
+      throw new Error(error.message);
     }
   };
 
@@ -78,7 +80,7 @@ export default class Api {
     try {
       const apiKey = 'c409756510054d3a62232c1ef3553fd6';
       const response = await fetch(
-        `https://api.themoviedb.org/3/guest_session/${await this.sessionID()}/rated/movies?api_key=${apiKey}&language=en-US&page=${page}&sort_by=created_at.asc`,
+        `${this.baseUrl}/guest_session/${await this.sessionID()}/rated/movies?api_key=${apiKey}&language=en-US&page=${page}&sort_by=created_at.asc`,
         this.options
       );
       if (!response.ok) {
@@ -87,12 +89,13 @@ export default class Api {
       const data = await response.json();
       return data;
     } catch (error) {
-      return Error(error.message);
+      console.log(error, 'in catch block');
+      throw new Error(error.message);
     }
   };
   getGenres = async () => {
     try {
-      const response = await fetch('https://api.themoviedb.org/3/genre/movie/list?language=en', this.options);
+      const response = await fetch(`${this.baseUrl}/genre/movie/list?language=en`, this.options);
       const data = await response.json();
       let genresObj = {};
       data.genres.forEach((genre) => {
@@ -100,7 +103,7 @@ export default class Api {
       });
       return genresObj;
     } catch (error) {
-      return Error(error.message);
+      throw new Error(error.message);
     }
   };
 }
