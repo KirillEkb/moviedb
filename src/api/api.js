@@ -89,7 +89,6 @@ export default class Api {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.log(error, 'in catch block');
       throw new Error(error.message);
     }
   };

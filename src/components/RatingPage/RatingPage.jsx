@@ -43,7 +43,6 @@ class RatingPage extends React.Component {
 
   render() {
     const { loading, error, ratedMovies, page, totalResults } = this.state;
-    console.log(error, 'in rating page');
     return (
       <>
         <LoadList

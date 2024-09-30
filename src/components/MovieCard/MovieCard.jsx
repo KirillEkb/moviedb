@@ -55,7 +55,7 @@ export default class MovieCard extends Component {
     const path = 'https://image.tmdb.org/t/p/w500';
     return (
       <li className="movieCard" key={id}>
-        <img className="movieCard__image image" src={path + poster_path}></img>
+        <img className="movieCard__image image" src={poster_path ? path + poster_path : '/poster-holder.jpg'}></img>
         <Title level={3} style={{ margin: 0, marginTop: '10px' }} className="movieCard__title title">
           {title}
         </Title>
